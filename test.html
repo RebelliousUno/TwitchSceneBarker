@@ -1,0 +1,41 @@
+<html>
+<head>
+<script src="http://cdn.tmijs.org/js/latest/tmi.js"></script>
+<script src="props.js"></script>
+<head>
+<body>
+<script>
+var options = {
+	options: {
+		debug: true,
+	},
+	connection: {
+		cluster: 'aws',
+		reconnect: true,
+	},
+	identity: {
+		username: props.username,
+		password: props.password,
+	},
+	channels: [props.channel],
+};
+
+var client = new irc.client(options);
+client.on('connected', function(address, port){
+	console.log('Connected to ' + address + ':' + port);
+	client.say(props.channel, props.bark).then(function(data){
+	console.log(data);
+}).catch(function(err) {
+	console.log(err);
+});
+});
+
+client.on('join',function(channel, username) {
+	console.log('Joined: ' + channel);
+	console.log('Username: ' + username);
+});
+
+client.connect();
+</script>
+</body>
+</html>
